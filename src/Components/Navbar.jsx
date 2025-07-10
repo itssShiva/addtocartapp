@@ -12,7 +12,9 @@ import Menu from '@mui/material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import { NavLink, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
+// Search styling (if needed later)
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -36,42 +38,38 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function handleProfileMenuOpen() {}
-
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+  
+  const cartNumbers = useSelector((state) => state.Cart.TotalQuantity);
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const handleProfileMenuOpen = () => {};
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = 'primary-search-account-menu';
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
@@ -80,27 +78,20 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
         <Link to="/cart" style={{ color: 'inherit', display: 'flex', alignItems: 'center' }}>
           <IconButton size="large" aria-label="cart" color="inherit">
-            <Badge badgeContent={4} color="error">
+            <Badge badgeContent={cartNumbers} color="error">
               <LocalMallIcon />
             </Badge>
           </IconButton>
@@ -112,7 +103,10 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: "rgb(30, 41, 57)" }}>
+      <AppBar position="static" sx={{ backgroundColor: "rgb(30, 41, 57)",
+      position:"fixed",
+      top:"0px",
+      zIndex:"1000"}}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -129,23 +123,11 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Link to="/cart" style={{ color: 'inherit' }}>
               <IconButton size="large" aria-label="cart" color="inherit">
-                <Badge badgeContent={4} color="error">
+                <Badge badgeContent={cartNumbers} color="error">
                   <LocalMallIcon />
                 </Badge>
               </IconButton>
             </Link>
-
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              {/* Profile icon (you can add Avatar or any other icon here) */}
-            </IconButton>
           </Box>
 
           {/* Mobile view */}
